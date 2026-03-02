@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import TickerInput from './ticker/TickerInput';
 import { fetchTickerDetails, fetchTickerList } from './utils/backend_services';
 import { TickerListElement } from './utils/ticker_list';
+import { useTicker } from '@/app/contexts/TickerContext';
 
 
 export default function Dashboard() {
@@ -11,7 +12,7 @@ export default function Dashboard() {
   const [tickerList, setTickerList] = useState<TickerListElement[]>([]);
   const [error, setError] = useState<string | null>(null);
   const [tickerValue, setTickerValue] = useState<string>(''); // current input
-  const [selectedTickerValue, setSelectedTickerValue] = useState<string>(''); // selected and applied stock
+  const { setTickerData, selectedTicker } = useTicker();
 
   useEffect(() => {
     let isMounted = true;
@@ -42,11 +43,9 @@ export default function Dashboard() {
   const handleGetTickerDetails = async () => {
     try {
       const response = await fetchTickerDetails(tickerValue);
-      setSelectedTickerValue(tickerValue)
-
-      console.log(response)
-      // TODO convert, link, chart...
+      setTickerData(response, tickerValue);
     } catch (e) {
+      setTickerData(null, tickerValue);
       console.error('Failed to fetch ticker info', e);
     }
   };
@@ -84,10 +83,10 @@ export default function Dashboard() {
             </button>
           </div>
 
-          {selectedTickerValue && (
+          {selectedTicker && (
             <div className="text-center space-y-2 pt-12">
               <p className="text-sm text-[var(--muted-foreground)]">
-                Current ticker is <strong>{selectedTickerValue}</strong>
+                Current ticker is <strong>{selectedTicker}</strong>
               </p>
               <p className="text-sm text-[var(--muted-foreground)]">
                 Pages available in top-right navigation dropdown.
