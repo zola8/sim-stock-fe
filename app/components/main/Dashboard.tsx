@@ -10,6 +10,7 @@ export default function Dashboard() {
   const [backendLoaded, setBackendLoaded] = useState(false);
   const [nasdaqData, setNasdaqData] = useState<NasdaqEntry[]>([]);
   const [error, setError] = useState<string | null>(null);
+  const [trackerValue, setTrackerValue] = useState('');
 
   useEffect(() => {
     let isMounted = true;
@@ -56,9 +57,18 @@ export default function Dashboard() {
 
       {backendLoaded && (
         <div className="w-full text-left">
-          <TrackerInput nasdaqData={nasdaqData} />
+          <TrackerInput
+            trackers={nasdaqData}
+            trackerValue={trackerValue}
+            onTrackerChange={setTrackerValue}
+          />
+
+          <p className="mt-4 text-sm text-[var(--muted-foreground)]">
+            Current tracker: {trackerValue || 'none selected'}
+          </p>
         </div>
       )}
+
     </div>
   );
 }
