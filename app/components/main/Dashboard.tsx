@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import TickerInput from './ticker/TickerInput';
 import { NasdaqEntry } from './types';
 import { fetchTickerInfo, fetchTickers } from './utils/backend_services';
+import { parseTickerData } from './utils/parseTickerData';
 
 
 export default function Dashboard() {
@@ -40,7 +41,9 @@ export default function Dashboard() {
 
   const handleGetTickerInfo = async () => {
     try {
-      const data = await fetchTickerInfo(tickerValue);
+      const response = await fetchTickerInfo(tickerValue);
+      const parsedData = parseTickerData(response);
+      console.log(parsedData)
       // TODO convert, link, chart...
     } catch (e) {
       console.error('Failed to fetch ticker info', e);

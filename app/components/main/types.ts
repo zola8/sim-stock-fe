@@ -21,3 +21,13 @@ export interface NasdaqScreenerData {
 export interface BackendResponse {
   tickers: string;
 }
+
+
+export interface TickerTimeSeriesData {
+  Close: Record<string, number>;
+  High: Record<string, number>;
+  Low: Record<string, number>;
+  Open: Record<string, number>;
+  Volume: Record<string, number>;
+}
+

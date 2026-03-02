@@ -15,6 +15,17 @@ const STORAGE_KEYS = {
 } as const;
 
 
+interface ApiResponseData {
+  data: string;
+  error: string;
+}
+
+
+export interface TickerApiResponse {
+  data: ApiResponseData;
+}
+
+
 /**
  * Get cached data
  */
