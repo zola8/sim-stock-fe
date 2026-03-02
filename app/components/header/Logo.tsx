@@ -5,7 +5,7 @@ export default function Logo() {
         S$
       </div>
       <span className="font-semibold text-xl tracking-tight text-[var(--primary-foreground)]">
-        sim-stock
+        sim-$tock
       </span>
     </div>
   );
