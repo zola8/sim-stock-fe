@@ -2,17 +2,16 @@
 
 import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/react";
 import { ChevronDownIcon } from "@heroicons/react/24/solid";
+import Link from "next/link";
+import { NavItem } from "./Header";
 
-interface NavItem {
-  name: string;
-  href: string;
-}
 
-interface Props {
+interface NavigationProps {
   navigation: NavItem[];
 }
 
-export default function SSMenuDropdown({ navigation }: Props) {
+
+export default function SSMenuDropdown({ navigation }: NavigationProps) {
   return (
     <Menu as="div" className="relative inline-block text-left">
       <div>
@@ -30,32 +29,21 @@ export default function SSMenuDropdown({ navigation }: Props) {
         className="absolute right-0 z-10 mt-2 w-56 origin-top-right rounded-md bg-[var(--popover)] shadow-lg ring-1 ring-black ring-opacity-5 transition focus:outline-none data-[closed]:scale-95 data-[closed]:transform data-[closed]:opacity-0 data-[enter]:duration-100 data-[leave]:duration-75 data-[enter]:ease-out data-[leave]:ease-in"
       >
         <div className="py-1">
-          {navigation.map((item, index) => {
-            if (item.name === "---") {
-              return (
-                <div
-                  key={`separator-${index}`}
-                  className="my-1 border-t border-[var(--border)]"
-                />
-              );
-            }
-
-            return (
-              <MenuItem key={`${item.name}-${index}`}>
-                {({ focus }) => (
-                  <a
-                    href={item.href}
-                    className={`block px-4 py-2 text-sm ${focus
-                        ? "bg-[var(--accent)] text-[var(--accent-foreground)]"
-                        : "text-[var(--popover-foreground)]"
-                      }`}
-                  >
-                    {item.name}
-                  </a>
-                )}
-              </MenuItem>
-            );
-          })}
+          {navigation.map((item, index) => (
+            <MenuItem key={`${item.name}-${index}`}>
+              {({ focus }) => (
+                <Link
+                  href={item.href}
+                  className={`block px-4 py-2 text-sm ${focus
+                    ? "bg-[var(--accent)] text-[var(--accent-foreground)]"
+                    : "text-[var(--popover-foreground)]"
+                    }`}
+                >
+                  {item.name}
+                </Link>
+              )}
+            </MenuItem>
+          ))}
         </div>
       </MenuItems>
     </Menu>

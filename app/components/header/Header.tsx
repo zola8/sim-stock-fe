@@ -1,40 +1,49 @@
 "use client";
 
 import { useState } from "react";
+import { clearAllCaches } from "../main/utils/backend_services";
 import ClearCacheButton from "./ClearCacheButton";
 import Logo from "./Logo";
 import MobileMenu from "./MobileMenu";
 import MobileMenuButton from "./MobileMenuButton";
 import SSMenuDropdown from "./SSMenuDropdown";
-import { clearAllCaches } from "../main/utils/backend_services";
 
-interface NavItem {
+
+export interface NavItem {
   name: string;
   href: string;
 }
 
-interface Props {
-  navigation: NavItem[];
-}
 
-export default function Header({ navigation }: Props) {
+const navigation: NavItem[] = [
+  { name: "Stock info", href: "/stock-info" },
+  { name: "Charts", href: "/charts" },
+  { name: "cccccc", href: "#" },
+  { name: "---", href: "#" },
+  { name: "ddd", href: "#" },
+];
+
+
+
+export default function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   function clearCache(): void {
-    clearAllCaches()
+    clearAllCaches();
   }
 
   return (
     <header className="sticky top-0 z-50 w-full border-b border-[var(--sidebar-border)] bg-[var(--primary)] text-[var(--primary-foreground)] backdrop-blur-md">
-      <nav
-        className="mx-auto flex max-w-7xl items-center justify-between p-6 lg:px-8"
-        aria-label="Global"
-      >
-        <div className="flex lg:flex-1">
-          <Logo />
+      <nav className="mx-auto max-w-7xl px-6 lg:px-8 flex items-center justify-between h-16">
+        <Logo />
+
+        <div className="hidden sm:flex items-center">
+          <ClearCacheButton onClearCache={clearCache} />
         </div>
 
-        <ClearCacheButton onClearCache={clearCache}/>
+        <div className="hidden lg:flex items-center gap-2">
+          <SSMenuDropdown navigation={navigation} />
+        </div>
 
         <div className="flex lg:hidden">
           <MobileMenuButton
@@ -43,8 +52,8 @@ export default function Header({ navigation }: Props) {
           />
         </div>
 
-        <div className="hidden lg:flex lg:flex-1 lg:justify-end">
-          <SSMenuDropdown navigation={navigation} />
+        <div className="lg:hidden">
+          <ClearCacheButton onClearCache={clearCache} />
         </div>
       </nav>
 

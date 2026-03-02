@@ -53,26 +53,28 @@ export default function Dashboard() {
 
 
   return (
-    <div className="flex flex-col items-start justify-center px-6 py-6 sm:px-12 lg:py-8 w-full max-w-8xl mx-auto">
+    <div className="flex flex-col items-center justify-center px-6 py-6 sm:px-12 lg:py-8 w-full max-w-7xl mx-auto">
       <h1 className="w-full text-center text-5xl font-extrabold tracking-tight text-[var(--foreground)] sm:text-7xl mb-8">
         sim-$tock
       </h1>
 
-      {error && <p className="text-red-500 mb-4 w-full">Error: {error}</p>}
+      {error && (
+        <p className="text-red-500 mb-4 w-full text-center">Error: {error}</p>
+      )}
 
       {!backendLoaded && !error && (
-        <p className="text-gray-500 mb-4 w-full">Initializing backend...</p>
+        <p className="text-gray-500 mb-4 w-full text-center">Initializing backend...</p>
       )}
 
       {backendLoaded && (
-        <div className="w-full text-left">
+        <div className="w-full space-y-6">
           <TickerInput
             tickers={tickerList}
             tickerValue={tickerValue}
             onTickerChange={setTickerValue}
           />
 
-          <div className="w-full max-w-2xl mx-auto px-6">
+          <div className="w-full max-w-md mx-auto">
             <button
               onClick={handleGetTickerDetails}
               className="w-full px-6 py-3 bg-[var(--primary)] text-[var(--primary-foreground)] rounded-[var(--radius)] font-medium hover:opacity-80 transition-opacity disabled:opacity-50 disabled:cursor-not-allowed"
@@ -82,17 +84,19 @@ export default function Dashboard() {
             </button>
           </div>
 
-          {selectedTickerValue && (<>
-            <p className="mt-20 text-sm text-[var(--muted-foreground)]">
-              Current ticker is <strong>{selectedTickerValue || 'none selected'}</strong>
-            </p>
-            <p className="mt-2 text-sm text-[var(--muted-foreground)]">
-              If you want to see charts, visit the .... link.
-            </p>
-          </>)}
-
+          {selectedTickerValue && (
+            <div className="text-center space-y-2 pt-12">
+              <p className="text-sm text-[var(--muted-foreground)]">
+                Current ticker is <strong>{selectedTickerValue}</strong>
+              </p>
+              <p className="text-sm text-[var(--muted-foreground)]">
+                Charts available in top-right navigation dropdown.
+              </p>
+            </div>
+          )}
         </div>
       )}
     </div>
   );
+
 }
