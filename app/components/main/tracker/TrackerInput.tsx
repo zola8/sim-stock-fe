@@ -3,9 +3,15 @@
 import { useState, ChangeEvent, MouseEvent } from 'react';
 import { HelpModal } from './HelpModal';
 import { QuestionMarkCircleIcon } from '@heroicons/react/24/outline'
+import { NasdaqEntry } from '../types';
 
 
-export default function TrackerInput() {
+interface TrackerInputProps {
+  nasdaqData: NasdaqEntry[];
+}
+
+
+export default function TrackerInput({ nasdaqData }: TrackerInputProps) {
   const [trackerValue, setTrackerValue] = useState('');
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -38,7 +44,10 @@ export default function TrackerInput() {
 
   return (
     <div className="w-full max-w-2xl mx-auto p-6">
-      <form onSubmit={handleSubmit as unknown as React.SubmitEventHandler<HTMLFormElement>} className="space-y-4">
+      <form
+        onSubmit={(e) => e.preventDefault()}
+        className="space-y-4"
+      >
         <div className="flex items-center gap-3">
           <div className="flex-1">
             <label
@@ -83,7 +92,15 @@ export default function TrackerInput() {
         </button>
       </form>
 
-      <HelpModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
+      <HelpModal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        data={nasdaqData}
+        onSelect={(selected) => {
+          if (selected) setTrackerValue(selected.Symbol);
+        }}
+      />
+
     </div>
   );
 }

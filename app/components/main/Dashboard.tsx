@@ -56,7 +56,7 @@ export default function Dashboard() {
 
       {backendLoaded && (
         <div className="w-full text-left">
-          <TrackerInput />
+          <TrackerInput nasdaqData={nasdaqData} />
         </div>
       )}
     </div>
