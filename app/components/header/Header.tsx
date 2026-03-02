@@ -1,10 +1,12 @@
 "use client";
 
 import { useState } from "react";
+import ClearCacheButton from "./ClearCacheButton";
 import Logo from "./Logo";
+import MobileMenu from "./MobileMenu";
 import MobileMenuButton from "./MobileMenuButton";
 import SSMenuDropdown from "./SSMenuDropdown";
-import MobileMenu from "./MobileMenu";
+import { clearAllCaches } from "../main/utils/backend_services";
 
 interface NavItem {
   name: string;
@@ -18,6 +20,10 @@ interface Props {
 export default function Header({ navigation }: Props) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
+  function clearCache(): void {
+    clearAllCaches()
+  }
+
   return (
     <header className="sticky top-0 z-50 w-full border-b border-[var(--sidebar-border)] bg-[var(--primary)] text-[var(--primary-foreground)] backdrop-blur-md">
       <nav
@@ -27,6 +33,8 @@ export default function Header({ navigation }: Props) {
         <div className="flex lg:flex-1">
           <Logo />
         </div>
+
+        <ClearCacheButton onClearCache={clearCache}/>
 
         <div className="flex lg:hidden">
           <MobileMenuButton

@@ -16,9 +16,10 @@ export interface TickerDetails {
 }
 
 
-export function parseTickerDetails(raw: TickerDetailsRaw): TickerDetails {
+export function parseTickerDetails(raw: string): TickerDetails {
   try {
-    const nestedData = JSON.parse(raw.data);
+    const nestedData = JSON.parse(raw);
+    console.log('---', nestedData)
 
     const firstKey = Object.keys(nestedData)[0];
     const [, , symbol] = firstKey.match(/^\('([^']+)',\s*'([^']+)'\)$/)!;

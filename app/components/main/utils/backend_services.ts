@@ -93,7 +93,7 @@ export async function fetchTickerInfo(ticker_id: string): Promise<TickerDetails>
   }
 
   const rawData = await response.json();
-  const parsedData = parseTickerDetails(rawData as TickerDetailsRaw);
+  const parsedData = parseTickerDetails(rawData);
 
   setCachedData(key, parsedData, ttl);
   return parsedData;
@@ -104,9 +104,9 @@ export async function fetchTickerInfo(ticker_id: string): Promise<TickerDetails>
 /**
  * Invalidate specific cache
  */
-export function invalidateCache(type: 'TICKERS' | 'TICKER_INFO', ticker?: string): void {
-  if (type === 'TICKERS') {
-    localStorage.removeItem(STORAGE_KEYS.TICKERS);
+export function invalidateCache(type: 'TICKER_LIST' | 'TICKER_INFO', ticker?: string): void {
+  if (type === 'TICKER_LIST') {
+    localStorage.removeItem(STORAGE_KEYS.TICKER_LIST);
   } else if (ticker) {
     localStorage.removeItem(STORAGE_KEYS.TICKER_INFO(ticker));
   }
@@ -117,7 +117,7 @@ export function invalidateCache(type: 'TICKERS' | 'TICKER_INFO', ticker?: string
  * Clear ALL caches
  */
 export function clearAllCaches(): void {
-  localStorage.removeItem(STORAGE_KEYS.TICKERS);
+  localStorage.removeItem(STORAGE_KEYS.TICKER_LIST);
   Object.keys(localStorage).forEach(key => {
     if (key.startsWith('ticker_info_')) {
       localStorage.removeItem(key);
