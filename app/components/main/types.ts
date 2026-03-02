@@ -19,5 +19,5 @@ export interface NasdaqScreenerData {
 }
 
 export interface BackendResponse {
-  nasdaq_screener: string;
+  tickers: string;
 }

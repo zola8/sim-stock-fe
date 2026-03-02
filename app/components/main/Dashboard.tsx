@@ -1,27 +1,27 @@
 'use client';
 
-import { useState, useEffect } from 'react';
-import TrackerInput from './tracker/TrackerInput';
 import { API_CONFIG } from '@/next.config';
-import { NasdaqEntry, BackendResponse } from './types';
-import { parseNasdaqData } from './utils/parseNasdaqData';
+import { useEffect, useState } from 'react';
+import TickerInput from './ticker/TickerInput';
+import { BackendResponse, NasdaqEntry } from './types';
+import { parseTickersData } from './utils/parseNasdaqData';
 
 export default function Dashboard() {
   const [backendLoaded, setBackendLoaded] = useState(false);
   const [nasdaqData, setNasdaqData] = useState<NasdaqEntry[]>([]);
   const [error, setError] = useState<string | null>(null);
-  const [trackerValue, setTrackerValue] = useState('');
+  const [tickerValue, setTickerValue] = useState('');
 
   useEffect(() => {
     let isMounted = true;
 
     const loadBackendData = async () => {
       try {
-        const response = await fetch(`${API_CONFIG.BASE_URL}${API_CONFIG.ENDPOINTS.INITIAL_DATA}`);
+        const response = await fetch(`${API_CONFIG.BASE_URL}${API_CONFIG.ENDPOINTS.TICKER_LIST}`);
         if (!response.ok) throw new Error(`HTTP error ${response.status}`);
 
         const result: BackendResponse = await response.json();
-        const parsed = parseNasdaqData(result.nasdaq_screener);
+        const parsed = parseTickersData(result.tickers);
 
         if (isMounted) {
           setNasdaqData(parsed);
@@ -57,14 +57,14 @@ export default function Dashboard() {
 
       {backendLoaded && (
         <div className="w-full text-left">
-          <TrackerInput
-            trackers={nasdaqData}
-            trackerValue={trackerValue}
-            onTrackerChange={setTrackerValue}
+          <TickerInput
+            tickers={nasdaqData}
+            tickerValue={tickerValue}
+            onTickerChange={setTickerValue}
           />
 
           <p className="mt-4 text-sm text-[var(--muted-foreground)]">
-            Current tracker: {trackerValue || 'none selected'}
+            Current ticker (symbol): {tickerValue || 'none selected'}
           </p>
         </div>
       )}

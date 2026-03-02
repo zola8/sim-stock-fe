@@ -1,6 +1,6 @@
 import { NasdaqEntry, NasdaqScreenerData } from '../types';
 
-export function parseNasdaqData(jsonString: string): NasdaqEntry[] {
+export function parseTickersData(jsonString: string): NasdaqEntry[] {
   try {
     const parsed: NasdaqScreenerData = JSON.parse(jsonString);
 
