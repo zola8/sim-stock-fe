@@ -1,29 +1,18 @@
-import { API_CONFIG } from '@/next.config';
-import { BackendResponse, NasdaqEntry } from '../types';
-import { parseTickersData } from './parseNasdaqData';
-
+import { API_CONFIG } from "@/next.config";
+import { parseTickerList, TickerListApiResponse, TickerListElement } from "./ticker_list";
+import { parseTickerDetails, TickerDetails, TickerDetailsRaw } from "./ticker_details";
 
 const CACHE_CONFIG = {
-  TICKERS: 24 * 60 * 60 * 1000, // 24 hours
+  TICKER_LIST: 24 * 60 * 60 * 1000, // 24 hours
   TICKER_INFO: 4 * 60 * 60 * 1000, // 4 hours
 } as const;
 
 
 const STORAGE_KEYS = {
-  TICKERS: 'ss_tickers_v1',
+  TICKER_LIST: 'ss_ticker_list',
   TICKER_INFO: (ticker: string) => `ss_ticker_info_${ticker}`,
 } as const;
 
-
-interface ApiResponseData {
-  data: string;
-  error: string;
-}
-
-
-export interface TickerApiResponse {
-  data: ApiResponseData;
-}
 
 
 /**
@@ -68,32 +57,28 @@ function setCachedData(key: string, data: any, ttl: number): void {
 /**
  * Fetch tickers with cache
  */
-export async function fetchTickers(): Promise<NasdaqEntry[]> {
-  const key = STORAGE_KEYS.TICKERS;
-  const cached = getCachedData(key, CACHE_CONFIG.TICKERS);
+export async function fetchTickers(): Promise<TickerListElement[]> {
+  const key = STORAGE_KEYS.TICKER_LIST;
+  const cached = getCachedData(key, CACHE_CONFIG.TICKER_LIST);
 
-  if (cached !== null) {
-    return cached;
-  }
+  if (cached !== null) return cached;
 
   const response = await fetch(`${API_CONFIG.BASE_URL}/ticker-list`);
+  if (!response.ok) throw new Error(`HTTP ${response.status}`);
 
-  if (!response.ok) {
-    throw new Error(`HTTP error ${response.status}`);
-  }
+  const rawResult = await response.json();
+  const parsedResult = parseTickerList(rawResult);
 
-  const result: BackendResponse = await response.json();
-  const parsed = parseTickersData(result.tickers);
-
-  setCachedData(key, parsed, CACHE_CONFIG.TICKERS);
-  return parsed;
+  setCachedData(key, parsedResult, CACHE_CONFIG.TICKER_LIST);
+  return parsedResult;
 }
+
 
 
 /**
  * Fetch ticker info with cache
  */
-export async function fetchTickerInfo(ticker_id: string): Promise<any> {
+export async function fetchTickerInfo(ticker_id: string): Promise<TickerDetails> {
   const key = STORAGE_KEYS.TICKER_INFO(ticker_id);
   const ttl = CACHE_CONFIG.TICKER_INFO;
 
@@ -103,15 +88,17 @@ export async function fetchTickerInfo(ticker_id: string): Promise<any> {
   }
 
   const response = await fetch(`${API_CONFIG.BASE_URL}/fetch/ticker/${ticker_id}`);
-
   if (!response.ok) {
     throw new Error(`Failed to fetch ticker info for ${ticker_id}: HTTP ${response.status}`);
   }
 
-  const data = await response.json();
-  setCachedData(key, data, ttl);
-  return data;
+  const rawData = await response.json();
+  const parsedData = parseTickerDetails(rawData as TickerDetailsRaw);
+
+  setCachedData(key, parsedData, ttl);
+  return parsedData;
 }
+
 
 
 /**

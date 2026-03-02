@@ -2,12 +2,12 @@
 
 import { QuestionMarkCircleIcon } from '@heroicons/react/24/outline';
 import { ChangeEvent, MouseEvent, useState } from 'react';
-import { NasdaqEntry } from '../types';
 import { HelpModal } from './HelpModal';
+import { TickerListElement } from '../utils/ticker_list';
 
 
 interface TickerInputProps {
-  tickers: NasdaqEntry[];
+  tickers: TickerListElement[];
   tickerValue: string;
   onTickerChange: (v: string) => void;
 }
@@ -17,7 +17,7 @@ export default function TickerInput({ tickers, tickerValue, onTickerChange }: Ti
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
-    onTickerChange(e.target.value);
+    onTickerChange(e.target.value || '');
   };
 
   const handleHelpClick = (e: MouseEvent<HTMLButtonElement>) => {
@@ -66,7 +66,7 @@ export default function TickerInput({ tickers, tickerValue, onTickerChange }: Ti
         onClose={() => setIsModalOpen(false)}
         data={tickers}
         onSelect={(selected) => {
-          if (selected) onTickerChange(selected.Symbol);
+          if (selected) onTickerChange(selected.symbol);
         }}
       />
 

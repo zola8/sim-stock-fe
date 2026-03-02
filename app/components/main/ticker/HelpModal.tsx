@@ -1,17 +1,17 @@
-import { useState, useEffect, useMemo, ChangeEvent } from 'react';
-import { XMarkIcon, MagnifyingGlassIcon } from '@heroicons/react/24/outline';
-import { NasdaqEntry } from '../types';
+import { MagnifyingGlassIcon, XMarkIcon } from '@heroicons/react/24/outline';
+import { ChangeEvent, useEffect, useMemo, useState } from 'react';
+import { TickerListElement } from '../utils/ticker_list';
 
 
 interface HelpModalProps {
   isOpen: boolean;
   onClose: () => void;
-  data: NasdaqEntry[];
-  onSelect: (selected: NasdaqEntry | null) => void;
+  data: TickerListElement[];
+  onSelect: (selected: TickerListElement | null) => void;
 }
 
 export function HelpModal({ isOpen, onClose, data, onSelect }: HelpModalProps) {
-  const [selectedRow, setSelectedRow] = useState<NasdaqEntry | null>(null);
+  const [selectedRow, setSelectedRow] = useState<TickerListElement | null>(null);
   const [searchInput, setSearchInput] = useState('');
   const [search, setSearch] = useState('');
 
@@ -25,8 +25,8 @@ export function HelpModal({ isOpen, onClose, data, onSelect }: HelpModalProps) {
     const term = search.toLowerCase();
     return data.filter(
       (row) =>
-        row.Name.toLowerCase().includes(term) ||
-        row.Symbol.toLowerCase().includes(term)
+        row.name.toLowerCase().includes(term) ||
+        row.symbol.toLowerCase().includes(term)
     );
   }, [data, search]);
 
@@ -96,20 +96,20 @@ export function HelpModal({ isOpen, onClose, data, onSelect }: HelpModalProps) {
             </thead>
             <tbody>
               {visibleRows.map((row) => {
-                const isSelected = selectedRow?.Symbol === row.Symbol;
+                const isSelected = selectedRow?.symbol === row.symbol;
                 return (
                   <tr
-                    key={row.Symbol}
+                    key={row.symbol}
                     className={`cursor-pointer transition-colors ${isSelected
                       ? 'bg-[var(--primary)] text-[var(--primary-foreground)]'
                       : 'hover:bg-[var(--muted)]'
                       }`}
                     onClick={() => setSelectedRow(row)}
                   >
-                    <td className="px-3 py-2">{row.Symbol}</td>
-                    <td className="px-3 py-2">{row.Name}</td>
-                    <td className="px-3 py-2">{row.Country}</td>
-                    <td className="px-3 py-2">{row.Industry}</td>
+                    <td className="px-3 py-2">{row.symbol}</td>
+                    <td className="px-3 py-2">{row.name}</td>
+                    <td className="px-3 py-2">{row.country}</td>
+                    <td className="px-3 py-2">{row.industry}</td>
                   </tr>
                 );
               })}

@@ -2,25 +2,24 @@
 
 import { useEffect, useState } from 'react';
 import TickerInput from './ticker/TickerInput';
-import { NasdaqEntry } from './types';
 import { fetchTickerInfo, fetchTickers } from './utils/backend_services';
-import { parseTickerData } from './utils/parseTickerData';
+import { TickerListElement } from './utils/ticker_list';
 
 
 export default function Dashboard() {
   const [backendLoaded, setBackendLoaded] = useState(false);
-  const [nasdaqData, setNasdaqData] = useState<NasdaqEntry[]>([]);
+  const [tickerList, setTickerList] = useState<TickerListElement[]>([]);
   const [error, setError] = useState<string | null>(null);
-  const [tickerValue, setTickerValue] = useState('');
+  const [tickerValue, setTickerValue] = useState<string>('');
 
   useEffect(() => {
     let isMounted = true;
 
     const loadData = async () => {
       try {
-        const parsed = await fetchTickers();
+        const parsedTickerList = await fetchTickers();
         if (isMounted) {
-          setNasdaqData(parsed);
+          setTickerList(parsedTickerList);
           setBackendLoaded(true);
         }
       } catch (err) {
@@ -42,8 +41,7 @@ export default function Dashboard() {
   const handleGetTickerInfo = async () => {
     try {
       const response = await fetchTickerInfo(tickerValue);
-      const parsedData = parseTickerData(response);
-      console.log(parsedData)
+      console.log(response)
       // TODO convert, link, chart...
     } catch (e) {
       console.error('Failed to fetch ticker info', e);
@@ -66,7 +64,7 @@ export default function Dashboard() {
       {backendLoaded && (
         <div className="w-full text-left">
           <TickerInput
-            tickers={nasdaqData}
+            tickers={tickerList}
             tickerValue={tickerValue}
             onTickerChange={setTickerValue}
           />
@@ -84,6 +82,7 @@ export default function Dashboard() {
           <p className="mt-4 text-sm text-[var(--muted-foreground)]">
             Current ticker (symbol): {tickerValue || 'none selected'}
           </p>
+
         </div>
       )}
     </div>
