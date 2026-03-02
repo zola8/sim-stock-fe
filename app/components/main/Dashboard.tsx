@@ -90,7 +90,7 @@ export default function Dashboard() {
                 Current ticker is <strong>{selectedTickerValue}</strong>
               </p>
               <p className="text-sm text-[var(--muted-foreground)]">
-                Charts available in top-right navigation dropdown.
+                Pages available in top-right navigation dropdown.
               </p>
             </div>
           )}
