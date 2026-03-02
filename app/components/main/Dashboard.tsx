@@ -1,10 +1,10 @@
 'use client';
 
-import { API_CONFIG } from '@/next.config';
 import { useEffect, useState } from 'react';
 import TickerInput from './ticker/TickerInput';
-import { BackendResponse, NasdaqEntry } from './types';
-import { parseTickersData } from './utils/parseNasdaqData';
+import { NasdaqEntry } from './types';
+import { fetchTickerInfo, fetchTickers } from './utils/backend_services';
+
 
 export default function Dashboard() {
   const [backendLoaded, setBackendLoaded] = useState(false);
@@ -15,14 +15,9 @@ export default function Dashboard() {
   useEffect(() => {
     let isMounted = true;
 
-    const loadBackendData = async () => {
+    const loadData = async () => {
       try {
-        const response = await fetch(`${API_CONFIG.BASE_URL}${API_CONFIG.ENDPOINTS.TICKER_LIST}`);
-        if (!response.ok) throw new Error(`HTTP error ${response.status}`);
-
-        const result: BackendResponse = await response.json();
-        const parsed = parseTickersData(result.tickers);
-
+        const parsed = await fetchTickers();
         if (isMounted) {
           setNasdaqData(parsed);
           setBackendLoaded(true);
@@ -36,11 +31,21 @@ export default function Dashboard() {
       }
     };
 
-    loadBackendData();
+    loadData();
     return () => {
       isMounted = false;
     };
   }, []);
+
+
+  const handleGetTickerInfo = async () => {
+    try {
+      const data = await fetchTickerInfo(tickerValue);
+      // TODO convert, link, chart...
+    } catch (e) {
+      console.error('Failed to fetch ticker info', e);
+    }
+  };
 
 
   return (
@@ -63,12 +68,21 @@ export default function Dashboard() {
             onTickerChange={setTickerValue}
           />
 
+          <div className="w-full max-w-2xl mx-auto px-6">
+            <button
+              onClick={handleGetTickerInfo}
+              className="w-full px-6 py-3 bg-[var(--primary)] text-[var(--primary-foreground)] rounded-[var(--radius)] font-medium hover:opacity-80 transition-opacity disabled:opacity-50 disabled:cursor-not-allowed"
+              disabled={!tickerValue.trim()}
+            >
+              Get info
+            </button>
+          </div>
+
           <p className="mt-4 text-sm text-[var(--muted-foreground)]">
             Current ticker (symbol): {tickerValue || 'none selected'}
           </p>
         </div>
       )}
-
     </div>
   );
 }

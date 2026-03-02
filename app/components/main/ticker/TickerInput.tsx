@@ -40,6 +40,7 @@ export default function TickerInput({ tickers, tickerValue, onTickerChange }: Ti
             id="tracker-input"
             name="tracker"
             type="text"
+            maxLength={10}
             value={tickerValue}
             onChange={handleInputChange}
             placeholder="Enter your symbol..."
