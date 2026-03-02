@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import TickerInput from './ticker/TickerInput';
-import { fetchTickerInfo, fetchTickers } from './utils/backend_services';
+import { fetchTickerDetails, fetchTickerList } from './utils/backend_services';
 import { TickerListElement } from './utils/ticker_list';
 
 
@@ -10,14 +10,15 @@ export default function Dashboard() {
   const [backendLoaded, setBackendLoaded] = useState(false);
   const [tickerList, setTickerList] = useState<TickerListElement[]>([]);
   const [error, setError] = useState<string | null>(null);
-  const [tickerValue, setTickerValue] = useState<string>('');
+  const [tickerValue, setTickerValue] = useState<string>(''); // current input
+  const [selectedTickerValue, setSelectedTickerValue] = useState<string>(''); // selected and applied stock
 
   useEffect(() => {
     let isMounted = true;
 
     const loadData = async () => {
       try {
-        const parsedTickerList = await fetchTickers();
+        const parsedTickerList = await fetchTickerList();
         if (isMounted) {
           setTickerList(parsedTickerList);
           setBackendLoaded(true);
@@ -38,9 +39,11 @@ export default function Dashboard() {
   }, []);
 
 
-  const handleGetTickerInfo = async () => {
+  const handleGetTickerDetails = async () => {
     try {
-      const response = await fetchTickerInfo(tickerValue);
+      const response = await fetchTickerDetails(tickerValue);
+      setSelectedTickerValue(tickerValue)
+
       console.log(response)
       // TODO convert, link, chart...
     } catch (e) {
@@ -71,7 +74,7 @@ export default function Dashboard() {
 
           <div className="w-full max-w-2xl mx-auto px-6">
             <button
-              onClick={handleGetTickerInfo}
+              onClick={handleGetTickerDetails}
               className="w-full px-6 py-3 bg-[var(--primary)] text-[var(--primary-foreground)] rounded-[var(--radius)] font-medium hover:opacity-80 transition-opacity disabled:opacity-50 disabled:cursor-not-allowed"
               disabled={!tickerValue.trim()}
             >
@@ -79,9 +82,14 @@ export default function Dashboard() {
             </button>
           </div>
 
-          <p className="mt-4 text-sm text-[var(--muted-foreground)]">
-            Current ticker (symbol): {tickerValue || 'none selected'}
-          </p>
+          {selectedTickerValue && (<>
+            <p className="mt-20 text-sm text-[var(--muted-foreground)]">
+              Current ticker is <strong>{selectedTickerValue || 'none selected'}</strong>
+            </p>
+            <p className="mt-2 text-sm text-[var(--muted-foreground)]">
+              If you want to see charts, visit the .... link.
+            </p>
+          </>)}
 
         </div>
       )}

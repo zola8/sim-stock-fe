@@ -57,7 +57,7 @@ function setCachedData(key: string, data: any, ttl: number): void {
 /**
  * Fetch tickers with cache
  */
-export async function fetchTickers(): Promise<TickerListElement[]> {
+export async function fetchTickerList(): Promise<TickerListElement[]> {
   const key = STORAGE_KEYS.TICKER_LIST;
   const cached = getCachedData(key, CACHE_CONFIG.TICKER_LIST);
 
@@ -78,7 +78,7 @@ export async function fetchTickers(): Promise<TickerListElement[]> {
 /**
  * Fetch ticker info with cache
  */
-export async function fetchTickerInfo(ticker_id: string): Promise<TickerDetails> {
+export async function fetchTickerDetails(ticker_id: string): Promise<TickerDetails> {
   const key = STORAGE_KEYS.TICKER_INFO(ticker_id);
   const ttl = CACHE_CONFIG.TICKER_INFO;
 
@@ -89,14 +89,14 @@ export async function fetchTickerInfo(ticker_id: string): Promise<TickerDetails>
 
   const response = await fetch(`${API_CONFIG.BASE_URL}/fetch/ticker/${ticker_id}`);
   if (!response.ok) {
-    throw new Error(`Failed to fetch ticker info for ${ticker_id}: HTTP ${response.status}`);
+    throw new Error(`Failed to fetch ticker details for ${ticker_id}: HTTP ${response.status}`);
   }
 
-  const rawData = await response.json();
-  const parsedData = parseTickerDetails(rawData);
+  const rawResult = await response.json();
+  const parsedResult = parseTickerDetails(rawResult);
 
-  setCachedData(key, parsedData, ttl);
-  return parsedData;
+  setCachedData(key, parsedResult, ttl);
+  return parsedResult;
 }
 
 
@@ -119,7 +119,7 @@ export function invalidateCache(type: 'TICKER_LIST' | 'TICKER_INFO', ticker?: st
 export function clearAllCaches(): void {
   localStorage.removeItem(STORAGE_KEYS.TICKER_LIST);
   Object.keys(localStorage).forEach(key => {
-    if (key.startsWith('ticker_info_')) {
+    if (key.startsWith('ss_ticker_info_')) {
       localStorage.removeItem(key);
     }
   });

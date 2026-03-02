@@ -16,25 +16,31 @@ export interface TickerDetails {
 }
 
 
-export function parseTickerDetails(raw: string): TickerDetails {
+export function parseTickerDetails(raw: TickerDetailsRaw): TickerDetails {
   try {
-    const nestedData = JSON.parse(raw);
-    console.log('---', nestedData)
+    if (raw.error) {
+      throw new Error(raw.error);
+    }
 
-    const firstKey = Object.keys(nestedData)[0];
-    const [, , symbol] = firstKey.match(/^\('([^']+)',\s*'([^']+)'\)$/)!;
+    const innerData = JSON.parse(raw.data);
+    const firstKey = Object.keys(innerData)[0];
+    const match = firstKey.match(/^\('([^']+)',\s*'([^']+)'\)$/);
+    if (!match) {
+      throw new Error('Invalid key format - no symbol found');
+    }
+    const [, , symbol] = match;
 
     const timeSeries = {
-      Close: nestedData[`('Close', '${symbol}')`] ?? {},
-      High: nestedData[`('High', '${symbol}')`] ?? {},
-      Low: nestedData[`('Low', '${symbol}')`] ?? {},
-      Open: nestedData[`('Open', '${symbol}')`] ?? {},
-      Volume: nestedData[`('Volume', '${symbol}')`] ?? {},
+      Close: innerData[`('Close', '${symbol}')`] ?? {},
+      High: innerData[`('High', '${symbol}')`] ?? {},
+      Low: innerData[`('Low', '${symbol}')`] ?? {},
+      Open: innerData[`('Open', '${symbol}')`] ?? {},
+      Volume: innerData[`('Volume', '${symbol}')`] ?? {},
     };
 
     return { symbol, timeSeries };
   } catch (error) {
     console.error('Failed to parse ticker details:', error);
-    throw new Error('Invalid ticker details format');
+    throw new Error(`Invalid ticker details format: ${error instanceof Error ? error.message : 'Unknown error'}`);
   }
 }
