@@ -94,9 +94,7 @@ export async function fetchTickerDetails(ticker_id: string): Promise<TickerDetai
   }
 
   const rawResult: TickerDetailsRaw = await response.json();
-  console.log(rawResult)
   const parsedResult = parseTickerDetails(rawResult);
-  console.log(parsedResult)
 
   setCachedData(key, parsedResult, ttl);
   return parsedResult;
