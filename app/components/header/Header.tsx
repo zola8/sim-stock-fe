@@ -17,8 +17,8 @@ export interface NavItem {
 
 const navigation: NavItem[] = [
   { name: "Ticker info", href: "/ticker-info" },
-  { name: "Charts", href: "/charts" },
-  { name: "cccccc", href: "#" },
+  { name: "Financials", href: "/financials" },
+  { name: "cc", href: "#" },
   { name: "---", href: "#" },
   { name: "ddd", href: "#" },
 ];

@@ -5,13 +5,13 @@ import { NoDataPanel } from "../components/nodata/NoDataPanel";
 import { useTicker } from "../contexts/TickerContext";
 import { TickerCompanyInfo } from "../types/tickerCompanyInfo";
 import { AnalystEstimates } from "./AnalystEstimates";
+import { BalanceSheetCashflow } from "./BalanceSheetCashflow";
 import { CompanySummaryContact } from "./CompanySummaryContact";
 import { ExecutiveLeadership } from "./ExecutiveLeadership";
 import { FinancialHighlights } from "./FinancialHighlights";
 import { PrimaryStats } from "./PrimaryStats";
 import { RiskAndGovernance } from "./RiskAndGovernance";
 import { TickerHeader } from "./TickerHeader";
-import { BalanceSheetCashflow } from "./BalanceSheetCashflow";
 
 
 export default function TickerInfoPage(): JSX.Element {

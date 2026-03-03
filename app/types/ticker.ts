@@ -51,15 +51,22 @@ export interface TickerDetailsRaw {
 }
 
 
+export interface TickerDetailRawEntry {
+  [metric: string]: number | null;
+}
+
+export type TickerDetailEntry = Record<string, TickerDetailRawEntry>;
+
+
 export interface TickerDetails {
   symbol: string;
   timeSeries: TickerCompanyHistory;
   info: TickerCompanyInfo | null;
   isin?: string;
-  financials?: Record<string, unknown>;
-  income_stmt?: Record<string, unknown>;
-  recommendations?: Record<string, unknown>;
-  revenue_estimate?: Record<string, unknown>;
+  financials?: TickerDetailEntry;
+  income_stmt?: TickerDetailEntry;
+  recommendations?: TickerDetailEntry;
+  revenue_estimate?: TickerDetailEntry;
 }
 
 
