@@ -1,11 +1,11 @@
 "use client"
 
 import { JSX } from "react";
-import { formatCurrency, formatNumber, formatPercent } from "../components/main/utils/formatters";
 import { NoDataPanel } from "../components/nodata/NoDataPanel";
 import { useTicker } from "../contexts/TickerContext";
 import { StockCompanyInfo } from "../types/stockCompany";
 import { StatCard } from "./StatCard";
+import { formatCurrency, formatPercent, formatNumber } from "../utils/formatters";
 
 
 export default function TickerInfoPage(): JSX.Element {

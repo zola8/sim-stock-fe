@@ -29,7 +29,6 @@ export interface TickerListApiResponse {
 export interface TickerDetailsRaw {
   history: string | null;
   info: StockCompanyInfo | null;
-  error: string | null;
 }
 
 

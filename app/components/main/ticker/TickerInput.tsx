@@ -3,7 +3,7 @@
 import { QuestionMarkCircleIcon } from '@heroicons/react/24/outline';
 import { ChangeEvent, MouseEvent, useState } from 'react';
 import { HelpModal } from './HelpModal';
-import { TickerListElement } from '../utils/tickerListParser';
+import { TickerListElement } from '@/app/types/ticker';
 
 
 interface TickerInputProps {

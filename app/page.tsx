@@ -2,9 +2,9 @@
 
 import { useEffect, useState } from "react";
 import TickerInput from "./components/main/ticker/TickerInput";
-import { fetchTickerDetails, fetchTickerList } from "./components/main/utils/backend_services";
 import { useTicker } from "./contexts/TickerContext";
 import { TickerListElement } from "./types/ticker";
+import { fetchTickerDetails, fetchTickerList } from "./utils/backend_services";
 
 
 export default function Home() {

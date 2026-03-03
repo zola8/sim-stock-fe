@@ -1,6 +1,7 @@
 import { API_CONFIG } from "@/next.config";
-import { parseTickerList, TickerListApiResponse, TickerListElement } from "./tickerListParser";
-import { parseTickerDetails, TickerDetails, TickerDetailsRaw } from "./tickerDetailsParser";
+import { TickerListElement, TickerDetails } from "../types/ticker";
+import { parseTickerDetails } from "./tickerDetailsParser";
+import { parseTickerList } from "./tickerListParser";
 
 const CACHE_CONFIG = {
   TICKER_LIST: 24 * 60 * 60 * 1000, // 24 hours
@@ -75,7 +76,7 @@ export async function fetchTickerList(): Promise<TickerListElement[]> {
 
 
 /**
- * Fetch ticker info with cache
+ * Fetch ticker details with cache
  */
 export async function fetchTickerDetails(ticker_id: string): Promise<TickerDetails> {
   const key = STORAGE_KEYS.TICKER_INFO(ticker_id);

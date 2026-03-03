@@ -3,20 +3,18 @@ import { TickerDetails, TickerDetailsRaw } from "@/app/types/ticker";
 
 export function parseTickerDetails(raw: TickerDetailsRaw): TickerDetails {
   try {
-    if (raw.error) {
-      throw new Error(raw.error);
-    }
-
-    if (!raw.history) {
-      throw new Error('Missing history data');
+    if (!raw.history || !raw.info) {
+      throw new Error('Missing info or history data');
     }
 
     const historyData = JSON.parse(raw.history);
     const firstKey = Object.keys(historyData)[0];
     const match = firstKey.match(/^\('([^']+)',\s*'([^']+)'\)$/);
-    if (!match) {
+
+    if (!match || !match[2]) {
       throw new Error('Invalid key format - no symbol found');
     }
+
     const [, , symbol] = match;
 
     const timeSeries = {
@@ -27,13 +25,12 @@ export function parseTickerDetails(raw: TickerDetailsRaw): TickerDetails {
       Volume: historyData[`('Volume', '${symbol}')`] ?? {},
     };
 
-    // Handle info data - safely handle null case
-    const infoData = raw.info ?? {};
+    const infoData = raw.info;
 
-    return { 
-      symbol, 
+    return {
+      symbol,
       timeSeries,
-      info: infoData 
+      info: infoData,
     };
   } catch (error) {
     console.error('Failed to parse ticker details:', error);
