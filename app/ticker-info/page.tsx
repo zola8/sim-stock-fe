@@ -112,7 +112,7 @@ export default function TickerInfoPage(): JSX.Element {
           </p>
         </div>
       </div>
-      
+
     </div>
   );
 }
