@@ -3,7 +3,7 @@
 import { JSX } from "react";
 import { NoDataPanel } from "../components/nodata/NoDataPanel";
 import { useTicker } from "../contexts/TickerContext";
-import { StockCompanyInfo } from "../types/stockCompany";
+import { StockCompanyInfo } from "../types/tickerCompanyInfo";
 import { StatCard } from "./StatCard";
 import { formatCurrency, formatPercent, formatNumber } from "../utils/formatters";
 

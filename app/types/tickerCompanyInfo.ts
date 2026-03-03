@@ -1,4 +1,4 @@
-export interface StockCompanyInfo {
+export interface TickerCompanyInfo {
   symbol: string;
   shortName?: string;
   longName?: string;

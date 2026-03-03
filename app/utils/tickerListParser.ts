@@ -1,29 +1,23 @@
-import { TickerListElement } from "@/app/types/ticker";
+import { RawTickerResponse, TickerListElement } from "@/app/types/ticker";
 
 
-export function parseTickerList(raw: string): TickerListElement[] {
-  let data: any;
+export function parseTickerList(raw: RawTickerResponse): TickerListElement[] {
+  if (!raw || !raw.Symbol) return [];
 
-  try {
-    data = JSON.parse(raw);
-  } catch (error) {
-    console.error("Failed to parse raw string:", error);
-    return [];
-  }
-
-  if (!data || !data.Symbol) return [];
-
-  const indices = Object.keys(data.Symbol);
+  const indices = Object.keys(raw.Symbol);
 
   return indices.map((index) => {
+    const ipoYear = raw.IPO_Year?.[index];
+    const volume = raw.Volume?.[index];
+
     return {
-      symbol: String(data.Symbol[index] || ''),
-      name: String(data.Name[index] || ''),
-      country: String(data.Country[index] || ''),
-      ipoYear: String(data.IPO_Year[index] || ''),
-      volume: Number(data.Volume[index] || 0),
-      sector: String(data.Sector[index] || ''),
-      industry: String(data.Industry[index] || ''),
+      symbol: String(raw.Symbol[index] ?? ''),
+      name: String(raw.Name[index] ?? ''),
+      country: String(raw.Country[index] ?? ''),
+      ipoYear: ipoYear != null ? String(ipoYear) : '',
+      volume: Number(volume ?? 0),
+      sector: String(raw.Sector[index] ?? ''),
+      industry: String(raw.Industry[index] ?? ''),
     };
   });
 }

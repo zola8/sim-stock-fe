@@ -1,6 +1,19 @@
 // ----- ticker list -----
 
-import { StockCompanyInfo } from "./stockCompany";
+import { TickerCompanyHistory } from "./tickerCompanyHistory";
+import { TickerCompanyInfo } from "./tickerCompanyInfo";
+
+
+export interface RawTickerResponse {
+  Symbol: Record<string, string>;
+  Name: Record<string, string>;
+  Country: Record<string, string>;
+  IPO_Year: Record<string, number | null>;
+  Volume: Record<string, number | null>;
+  Sector: Record<string, string>;
+  Industry: Record<string, string>;
+}
+
 
 export interface TickerListElement {
   symbol: string;
@@ -26,22 +39,27 @@ export interface TickerListApiResponse {
 
 // ----- ticker details -----
 
+
 export interface TickerDetailsRaw {
-  history: string | null;
-  info: StockCompanyInfo | null;
+  history: TickerCompanyHistory | null;
+  info: TickerCompanyInfo | null;
+  isin?: string;
+  financials?: string;
+  income_stmt?: string;
+  recommendations?: string;
+  revenue_estimate?: string;
 }
 
 
 export interface TickerDetails {
   symbol: string;
-  timeSeries: {
-    Close: Record<string, number>;
-    High: Record<string, number>;
-    Low: Record<string, number>;
-    Open: Record<string, number>;
-    Volume: Record<string, number>;
-  };
-  info: StockCompanyInfo | null;
+  timeSeries: TickerCompanyHistory;
+  info: TickerCompanyInfo | null;
+  isin?: string;
+  financials?: Record<string, unknown>;
+  income_stmt?: Record<string, unknown>;
+  recommendations?: Record<string, unknown>;
+  revenue_estimate?: Record<string, unknown>;
 }
 
 

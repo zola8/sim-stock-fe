@@ -2,38 +2,42 @@ import { TickerDetails, TickerDetailsRaw } from "@/app/types/ticker";
 
 
 export function parseTickerDetails(raw: TickerDetailsRaw): TickerDetails {
-  try {
-    if (!raw.history || !raw.info) {
-      throw new Error('Missing info or history data');
-    }
-
-    const historyData = JSON.parse(raw.history);
-    const firstKey = Object.keys(historyData)[0];
-    const match = firstKey.match(/^\('([^']+)',\s*'([^']+)'\)$/);
-
-    if (!match || !match[2]) {
-      throw new Error('Invalid key format - no symbol found');
-    }
-
-    const [, , symbol] = match;
-
-    const timeSeries = {
-      Close: historyData[`('Close', '${symbol}')`] ?? {},
-      High: historyData[`('High', '${symbol}')`] ?? {},
-      Low: historyData[`('Low', '${symbol}')`] ?? {},
-      Open: historyData[`('Open', '${symbol}')`] ?? {},
-      Volume: historyData[`('Volume', '${symbol}')`] ?? {},
-    };
-
-    const infoData = raw.info;
-
-    return {
-      symbol,
-      timeSeries,
-      info: infoData,
-    };
-  } catch (error) {
-    console.error('Failed to parse ticker details:', error);
-    throw new Error(`Invalid ticker details format: ${error instanceof Error ? error.message : 'Unknown error'}`);
+  if (!raw.history || !raw.info) {
+    throw new Error('Missing info or history data');
   }
+
+  const historyData = raw.history;
+  const firstKey = Object.keys(historyData)[0];
+  if (!firstKey) throw new Error('Empty history data');
+
+  const symbol = firstKey.split(',')[1];
+
+  const timeSeries = {
+    Close: historyData[`Close,${symbol}`] ?? {},
+    High: historyData[`High,${symbol}`] ?? {},
+    Low: historyData[`Low,${symbol}`] ?? {},
+    Open: historyData[`Open,${symbol}`] ?? {},
+    Volume: historyData[`Volume,${symbol}`] ?? {},
+  };
+
+  const tryParseJSON = (text?: string): Record<string, unknown> | undefined => {
+    if (!text) return;
+    try {
+      return JSON.parse(text);
+    } catch {
+      console.warn('Could not parse JSON field');
+      return;
+    }
+  };
+
+  return {
+    symbol,
+    timeSeries,
+    info: raw.info,
+    isin: raw.isin,
+    financials: tryParseJSON(raw.financials),
+    income_stmt: tryParseJSON(raw.income_stmt),
+    recommendations: tryParseJSON(raw.recommendations),
+    revenue_estimate: tryParseJSON(raw.revenue_estimate),
+  };
 }

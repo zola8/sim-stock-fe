@@ -1,5 +1,5 @@
 import { API_CONFIG } from "@/next.config";
-import { TickerListElement, TickerDetails } from "../types/ticker";
+import { TickerListElement, TickerDetails, TickerDetailsRaw } from "../types/ticker";
 import { parseTickerDetails } from "./tickerDetailsParser";
 import { parseTickerList } from "./tickerListParser";
 
@@ -93,8 +93,10 @@ export async function fetchTickerDetails(ticker_id: string): Promise<TickerDetai
     throw new Error(`Failed to fetch ticker details for ${ticker_id}: HTTP ${response.status}`);
   }
 
-  const rawResult = await response.json();
+  const rawResult: TickerDetailsRaw = await response.json();
+  console.log(rawResult)
   const parsedResult = parseTickerDetails(rawResult);
+  console.log(parsedResult)
 
   setCachedData(key, parsedResult, ttl);
   return parsedResult;
