@@ -8,7 +8,7 @@ import { StockCompanyInfo } from "../types/stockCompany";
 import { StatCard } from "./StatCard";
 
 
-export default function StockInfoPage(): JSX.Element {
+export default function TickerInfoPage(): JSX.Element {
   const { tickerData } = useTicker();
 
   if (!tickerData?.info) {
@@ -65,7 +65,7 @@ export default function StockInfoPage(): JSX.Element {
           label="Profit Margin"
           value={info.profitMargins ? `${(info.profitMargins * 100).toFixed(2)}%` : 'N/A'}
         />
-        <StatCard label="Analyst Rec." value={info.recommendationKey?.toUpperCase() || 'N/A'} />
+        <StatCard label="Analyst Recommendation" value={info.recommendationKey?.toUpperCase() || 'N/A'} />
       </div>
 
       {info.longBusinessSummary && (
@@ -75,7 +75,7 @@ export default function StockInfoPage(): JSX.Element {
         </div>
       )}
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm pb-4 border-b">
         <div className="space-y-1">
           <p>
             <span className="font-medium">Headquarters:</span> {info.address1}, {info.city},{' '}
@@ -112,6 +112,7 @@ export default function StockInfoPage(): JSX.Element {
           </p>
         </div>
       </div>
+      
     </div>
   );
 }
