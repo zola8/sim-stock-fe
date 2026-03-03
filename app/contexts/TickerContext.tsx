@@ -1,12 +1,6 @@
 import { createContext, ReactNode, useContext, useState } from 'react';
-import { TickerDetails } from '../components/main/utils/ticker_details';
+import { TickerContextType, TickerDetails } from '../types/ticker';
 
-
-interface TickerContextType {
-  tickerData: TickerDetails | null;
-  selectedTicker: string;
-  setTickerData: (data: TickerDetails | null, ticker: string) => void;
-}
 
 
 const TickerContext = createContext<TickerContextType | undefined>(undefined);

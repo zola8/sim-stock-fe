@@ -1,21 +1,4 @@
-export interface TickerDetailsRaw {
-  history: string | null;
-  info: {} | null;
-  error: string | null;
-}
-
-
-export interface TickerDetails {
-  symbol: string;
-  timeSeries: {
-    Close: Record<string, number>;
-    High: Record<string, number>;
-    Low: Record<string, number>;
-    Open: Record<string, number>;
-    Volume: Record<string, number>;
-  };
-  info: {};
-}
+import { TickerDetails, TickerDetailsRaw } from "@/app/types/ticker";
 
 
 export function parseTickerDetails(raw: TickerDetailsRaw): TickerDetails {

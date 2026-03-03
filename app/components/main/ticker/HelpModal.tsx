@@ -1,6 +1,6 @@
 import { MagnifyingGlassIcon, XMarkIcon } from '@heroicons/react/24/outline';
 import { ChangeEvent, useEffect, useMemo, useState } from 'react';
-import { TickerListElement } from '../utils/ticker_list';
+import { TickerListElement } from '../utils/tickerListParser';
 
 
 interface HelpModalProps {

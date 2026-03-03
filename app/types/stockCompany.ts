@@ -1,0 +1,32 @@
+export interface StockCompanyInfo {
+  symbol: string;
+  shortName?: string;
+  longName?: string;
+  exchange?: string;
+  sector?: string;
+  industry?: string;
+  currency?: string;
+  currentPrice?: number;
+  regularMarketPrice?: number;
+  regularMarketChange?: number;
+  regularMarketChangePercent?: number;
+  marketCap?: number;
+  forwardPE?: number;
+  fiftyTwoWeekLow?: number;
+  fiftyTwoWeekHigh?: number;
+  beta?: number;
+  averageVolume?: number;
+  fullTimeEmployees?: number;
+  profitMargins?: number;
+  recommendationKey?: string;
+  longBusinessSummary?: string;
+  address1?: string;
+  city?: string;
+  state?: string;
+  zip?: string;
+  country?: string;
+  phone?: string;
+  website?: string;
+  targetMeanPrice?: number;
+  numberOfAnalystOpinions?: number;
+}

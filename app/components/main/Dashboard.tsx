@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react';
 import TickerInput from './ticker/TickerInput';
 import { fetchTickerDetails, fetchTickerList } from './utils/backend_services';
-import { TickerListElement } from './utils/ticker_list';
+import { TickerListElement } from './utils/tickerListParser';
 import { useTicker } from '@/app/contexts/TickerContext';
 
 

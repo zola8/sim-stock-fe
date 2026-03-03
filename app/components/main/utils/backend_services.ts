@@ -1,6 +1,6 @@
 import { API_CONFIG } from "@/next.config";
-import { parseTickerList, TickerListApiResponse, TickerListElement } from "./ticker_list";
-import { parseTickerDetails, TickerDetails, TickerDetailsRaw } from "./ticker_details";
+import { parseTickerList, TickerListApiResponse, TickerListElement } from "./tickerListParser";
+import { parseTickerDetails, TickerDetails, TickerDetailsRaw } from "./tickerDetailsParser";
 
 const CACHE_CONFIG = {
   TICKER_LIST: 24 * 60 * 60 * 1000, // 24 hours
