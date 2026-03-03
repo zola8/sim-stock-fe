@@ -74,7 +74,6 @@ export async function fetchTickerList(): Promise<TickerListElement[]> {
 }
 
 
-
 /**
  * Fetch ticker info with cache
  */
@@ -88,6 +87,7 @@ export async function fetchTickerDetails(ticker_id: string): Promise<TickerDetai
   }
 
   const response = await fetch(`${API_CONFIG.BASE_URL}/fetch/ticker/${ticker_id}`);
+
   if (!response.ok) {
     throw new Error(`Failed to fetch ticker details for ${ticker_id}: HTTP ${response.status}`);
   }
@@ -98,7 +98,6 @@ export async function fetchTickerDetails(ticker_id: string): Promise<TickerDetai
   setCachedData(key, parsedResult, ttl);
   return parsedResult;
 }
-
 
 
 /**

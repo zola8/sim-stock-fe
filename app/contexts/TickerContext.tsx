@@ -8,9 +8,9 @@ const TickerContext = createContext<TickerContextType | undefined>(undefined);
 
 export function TickerProvider({ children }: { children: ReactNode }) {
   const [tickerData, setTickerDataState] = useState<TickerDetails | null>(null);
-  const [selectedTicker, setSelectedTicker] = useState('');
+  const [selectedTicker, setSelectedTicker] = useState<string | null>(null);
 
-  const setTickerData = (data: TickerDetails | null, ticker: string) => {
+  const setTickerData = (data: TickerDetails | null, ticker: string | null) => {
     setTickerDataState(data);
     setSelectedTicker(ticker);
   };

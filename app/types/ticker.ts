@@ -50,7 +50,6 @@ export interface TickerDetails {
 
 export interface TickerContextType {
   tickerData: TickerDetails | null;
-  selectedTicker: string;
-  setTickerData: (data: TickerDetails | null, ticker: string) => void;
+  selectedTicker: string | null;
+  setTickerData: (data: TickerDetails | null, ticker: string | null) => void;
 }
-

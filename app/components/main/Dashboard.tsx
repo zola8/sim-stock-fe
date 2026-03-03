@@ -3,8 +3,8 @@
 import { useEffect, useState } from 'react';
 import TickerInput from './ticker/TickerInput';
 import { fetchTickerDetails, fetchTickerList } from './utils/backend_services';
-import { TickerListElement } from './utils/tickerListParser';
 import { useTicker } from '@/app/contexts/TickerContext';
+import { TickerListElement } from '@/app/types/ticker';
 
 
 export default function Dashboard() {
@@ -13,6 +13,7 @@ export default function Dashboard() {
   const [error, setError] = useState<string | null>(null);
   const [tickerValue, setTickerValue] = useState<string>(''); // current input
   const { setTickerData, selectedTicker } = useTicker();
+  const [fetchingError, setFetchingError] = useState<string | null>(null);
 
   useEffect(() => {
     let isMounted = true;
@@ -42,11 +43,12 @@ export default function Dashboard() {
 
   const handleGetTickerDetails = async () => {
     try {
+      setFetchingError(null)
       const response = await fetchTickerDetails(tickerValue);
       setTickerData(response, tickerValue);
     } catch (e) {
-      setTickerData(null, tickerValue);
-      console.error('Failed to fetch ticker info', e);
+      setTickerData(null, null);
+      setFetchingError('Invalid or wrong ticket symbol. Cannot fetch data.')
     }
   };
 
@@ -92,6 +94,10 @@ export default function Dashboard() {
                 Pages available in top-right navigation dropdown.
               </p>
             </div>
+          )}
+
+          {fetchingError && (
+            <p className="text-red-500 mb-4 w-full text-center">{fetchingError}</p>
           )}
         </div>
       )}
