@@ -20,13 +20,15 @@ export function parseTickerDetails(raw: TickerDetailsRaw): TickerDetails {
     Volume: historyData[`Volume,${symbol}`] ?? {},
   };
 
-  const tryParseJSON = (text?: string): Record<string, unknown> | undefined => {
-    if (!text) return;
+  const tryParseJSON = <T = Record<string, TickerDetailsRaw | null | undefined>>(
+    text?: string
+  ): T | undefined => {
+    if (!text) return undefined;
     try {
-      return JSON.parse(text);
+      return JSON.parse(text) as T;
     } catch {
       console.warn('Could not parse JSON field');
-      return;
+      return undefined;
     }
   };
 
@@ -35,7 +37,6 @@ export function parseTickerDetails(raw: TickerDetailsRaw): TickerDetails {
     timeSeries,
     info: raw.info,
     isin: raw.isin,
-    financials: tryParseJSON(raw.financials),
     income_stmt: tryParseJSON(raw.income_stmt),
     recommendations: tryParseJSON(raw.recommendations),
     revenue_estimate: tryParseJSON(raw.revenue_estimate),

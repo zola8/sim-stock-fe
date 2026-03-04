@@ -9,6 +9,7 @@ import {
 } from 'chart.js';
 import { useMemo } from 'react';
 import { Bar } from 'react-chartjs-2';
+import { TickerDetailEntry } from '../types/ticker';
 
 ChartJS.register(
   CategoryScale,
@@ -29,8 +30,9 @@ export interface RecommendationsData {
 }
 
 interface RecommendationsChartProps {
-  data?: RecommendationsData;
+  data?: TickerDetailEntry;
 }
+
 
 export function RecommendationsChart({ data }: RecommendationsChartProps) {
   const chartData = useMemo(() => {

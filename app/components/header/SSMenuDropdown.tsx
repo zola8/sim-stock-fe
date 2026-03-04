@@ -1,9 +1,9 @@
 "use client";
 
+import { NavItem } from "@/app/utils/menulinks";
 import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/react";
 import { ChevronDownIcon } from "@heroicons/react/24/solid";
 import Link from "next/link";
-import { NavItem } from "./Header";
 
 
 interface NavigationProps {
