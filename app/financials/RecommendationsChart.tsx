@@ -19,7 +19,7 @@ ChartJS.register(
   Legend
 );
 
-interface RecommendationsData {
+export interface RecommendationsData {
   period: Record<string, string>;
   strongBuy: Record<string, number>;
   buy: Record<string, number>;
@@ -89,7 +89,7 @@ export function RecommendationsChart({ data }: RecommendationsChartProps) {
   if (!data) return <p>No recommendations data available.</p>;
 
   return (
-    <div>
+    <div className='mx-auto w-9/10 h-96 md:h-[500px] p-4 border rounded-lg'>
       <Bar data={chartData} options={options} />
     </div>
   );
