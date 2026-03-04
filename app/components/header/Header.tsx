@@ -7,20 +7,7 @@ import MobileMenu from "./MobileMenu";
 import MobileMenuButton from "./MobileMenuButton";
 import SSMenuDropdown from "./SSMenuDropdown";
 import { clearAllCaches } from "@/app/utils/backend_services";
-
-
-export interface NavItem {
-  name: string;
-  href: string;
-}
-
-
-const navigation: NavItem[] = [
-  { name: "Charts", href: "/charts" },
-  { name: "---", href: "#" },
-  { name: "Ticker info", href: "/ticker-info" },
-  { name: "Financials", href: "/financials" },
-];
+import { navigation } from "@/app/utils/menulinks";
 
 
 
@@ -37,16 +24,12 @@ export default function Header() {
         <Logo />
 
         <div className="flex items-center gap-2">
-          <div className="hidden sm:flex">
+          <div className="">
             <ClearCacheButton onClearCache={clearCache} />
           </div>
 
           <div className="hidden lg:flex">
             <SSMenuDropdown navigation={navigation} />
-          </div>
-
-          <div className="flex sm:hidden">
-            <ClearCacheButton onClearCache={clearCache} />
           </div>
 
           <div className="flex lg:hidden">

@@ -1,25 +1,28 @@
 'use client';
 
-import { useEffect, useState } from "react";
-import TickerInput from "./components/main/ticker/TickerInput";
-import { useTicker } from "./contexts/TickerContext";
-import { TickerListElement } from "./types/ticker";
-import { fetchTickerDetails, fetchTickerList } from "./utils/backend_services";
+import { JSX, useEffect, useState } from 'react';
+import NavigationCard from './components/main/NavigationCard';
+import SelectedTickerCard from './components/main/SelectedTickerCard';
+import TickerInput from './components/main/ticker/TickerInput';
+import { useTicker } from './contexts/TickerContext';
+import { TickerListElement } from './types/ticker';
+import { fetchTickerDetails, fetchTickerList } from './utils/backend_services';
 
 
-export default function Home() {
 
-  const [backendLoaded, setBackendLoaded] = useState(false);
+export default function Home(): JSX.Element {
+  const [backendLoaded, setBackendLoaded] = useState<boolean>(false);
   const [tickerList, setTickerList] = useState<TickerListElement[]>([]);
   const [error, setError] = useState<string | null>(null);
-  const [tickerValue, setTickerValue] = useState<string>(''); // current input
+  const [tickerValue, setTickerValue] = useState<string>('');
   const { setTickerData, selectedTicker } = useTicker();
   const [fetchingError, setFetchingError] = useState<string | null>(null);
+  const [loading, setLoading] = useState<boolean>(false);
 
   useEffect(() => {
     let isMounted = true;
 
-    const loadData = async () => {
+    const loadData = async (): Promise<void> => {
       try {
         const parsedTickerList = await fetchTickerList();
         if (isMounted) {
@@ -29,7 +32,9 @@ export default function Home() {
       } catch (err) {
         console.error('Loading backend data failed', err);
         if (isMounted) {
-          setError(err instanceof Error ? err.message : 'Loading backend data failed.');
+          setError(
+            err instanceof Error ? err.message : 'Loading backend data failed.'
+          );
           setBackendLoaded(false);
         }
       }
@@ -42,17 +47,21 @@ export default function Home() {
   }, []);
 
 
-  const handleGetTickerDetails = async () => {
+  const handleGetTickerDetails = async (): Promise<void> => {
+    if (!tickerValue.trim()) return;
+
     try {
+      setLoading(true);
       setFetchingError(null)
       const response = await fetchTickerDetails(tickerValue);
-      setTickerData(response, tickerValue);
+      setTickerData(response, tickerValue.toUpperCase());
     } catch (e) {
       setTickerData(null, null);
-      setFetchingError('Invalid or wrong ticket symbol. Cannot fetch data.')
+      setFetchingError('Failed to fetch ticker info.');
+    } finally {
+      setLoading(false);
     }
   };
-
 
   return (
     <div className="flex flex-col items-center justify-center px-6 py-6 sm:px-12 lg:py-8 w-full max-w-7xl mx-auto">
@@ -60,9 +69,7 @@ export default function Home() {
         sim-$tock
       </h1>
 
-      {error && (
-        <p className="text-red-500 mb-4 w-full text-center">Error: {error}</p>
-      )}
+      {error && <p className="text-red-500 mb-4 w-full text-center">Error: {error}</p>}
 
       {!backendLoaded && !error && (
         <p className="text-gray-500 mb-4 w-full text-center">Initializing backend...</p>
@@ -76,24 +83,29 @@ export default function Home() {
             onTickerChange={setTickerValue}
           />
 
-          <div className="w-full max-w-md mx-auto">
+          <div className="w-full flex justify-center">
             <button
               onClick={handleGetTickerDetails}
-              className="w-full px-6 py-3 bg-[var(--primary)] text-[var(--primary-foreground)] rounded-[var(--radius)] font-medium hover:opacity-80 transition-opacity disabled:opacity-50 disabled:cursor-not-allowed"
-              disabled={!tickerValue.trim()}
+              className="px-8 py-3 bg-[var(--primary)] text-[var(--primary-foreground)] 
+                         rounded-[var(--radius)] font-medium hover:opacity-80 transition-all 
+                         disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center min-w-[300px]"
+              disabled={!tickerValue.trim() || loading}
             >
-              Get info
+              {loading ? (
+                <div className="flex items-center space-x-2">
+                  <div className="w-4 h-4 border-2 border-[var(--primary-foreground)] border-t-transparent rounded-full animate-spin"></div>
+                  <span>Loading...</span>
+                </div>
+              ) : (
+                'Get info'
+              )}
             </button>
           </div>
 
           {selectedTicker && (
-            <div className="text-center space-y-2 pt-12">
-              <p className="text-sm text-[var(--muted-foreground)]">
-                Current ticker is <strong>{selectedTicker}</strong>
-              </p>
-              <p className="text-sm text-[var(--muted-foreground)]">
-                Pages available in top-right navigation dropdown.
-              </p>
+            <div>
+              <SelectedTickerCard selectedTicker={selectedTicker} />
+              <NavigationCard />
             </div>
           )}
 
@@ -104,5 +116,4 @@ export default function Home() {
       )}
     </div>
   );
-
 }
