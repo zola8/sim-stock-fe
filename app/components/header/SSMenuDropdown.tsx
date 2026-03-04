@@ -29,21 +29,29 @@ export default function SSMenuDropdown({ navigation }: NavigationProps) {
         className="absolute right-0 z-10 mt-2 w-56 origin-top-right rounded-md bg-[var(--popover)] shadow-lg ring-1 ring-black ring-opacity-5 transition focus:outline-none data-[closed]:scale-95 data-[closed]:transform data-[closed]:opacity-0 data-[enter]:duration-100 data-[leave]:duration-75 data-[enter]:ease-out data-[leave]:ease-in"
       >
         <div className="py-1">
-          {navigation.map((item, index) => (
-            <MenuItem key={`${item.name}-${index}`}>
-              {({ focus }) => (
-                <Link
-                  href={item.href}
-                  className={`block px-4 py-2 text-sm ${focus
-                    ? "bg-[var(--accent)] text-[var(--accent-foreground)]"
-                    : "text-[var(--popover-foreground)]"
-                    }`}
-                >
-                  {item.name}
-                </Link>
-              )}
-            </MenuItem>
-          ))}
+          {navigation.map((item, index) => {
+            if (item.name === "---") {
+              return (
+                <div key={`divider-${index}`} className="my-1 border-t border-[var(--border)]" />
+              );
+            }
+
+            return (
+              <MenuItem key={`${item.name}-${index}`}>
+                {({ focus }) => (
+                  <Link
+                    href={item.href}
+                    className={`block px-4 py-2 text-sm ${focus
+                        ? "bg-[var(--accent)] text-[var(--accent-foreground)]"
+                        : "text-[var(--popover-foreground)]"
+                      }`}
+                  >
+                    {item.name}
+                  </Link>
+                )}
+              </MenuItem>
+            );
+          })}
         </div>
       </MenuItems>
     </Menu>
