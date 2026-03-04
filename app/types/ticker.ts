@@ -44,7 +44,6 @@ export interface TickerDetailsRaw {
   history: TickerCompanyHistory | null;
   info: TickerCompanyInfo | null;
   isin?: string;
-  financials?: string;
   income_stmt?: string;
   recommendations?: string;
   revenue_estimate?: string;
@@ -63,7 +62,6 @@ export interface TickerDetails {
   timeSeries: TickerCompanyHistory;
   info: TickerCompanyInfo | null;
   isin?: string;
-  financials?: TickerDetailEntry;
   income_stmt?: TickerDetailEntry;
   recommendations?: TickerDetailEntry;
   revenue_estimate?: TickerDetailEntry;
