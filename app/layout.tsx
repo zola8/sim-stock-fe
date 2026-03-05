@@ -4,6 +4,19 @@ import Header from "./components/header/Header";
 import { TickerProvider } from "./contexts/TickerContext";
 import "./globals.css";
 
+import { CategoryScale, Chart as ChartJS, Legend, LinearScale, LineElement, PointElement, Title, Tooltip, BarElement } from 'chart.js';
+
+ChartJS.register(
+  CategoryScale,
+  LinearScale,
+  PointElement,
+  LineElement,
+  Title,
+  Tooltip,
+  Legend,
+  BarElement,
+);
+
 
 export default function RootLayout({
   children,

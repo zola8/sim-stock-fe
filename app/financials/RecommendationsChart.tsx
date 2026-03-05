@@ -1,24 +1,7 @@
-import {
-  BarElement,
-  CategoryScale,
-  Chart as ChartJS,
-  Legend,
-  LinearScale,
-  Title,
-  Tooltip,
-} from 'chart.js';
 import { useMemo } from 'react';
 import { Bar } from 'react-chartjs-2';
 import { TickerDetailEntry } from '../types/ticker';
 
-ChartJS.register(
-  CategoryScale,
-  LinearScale,
-  BarElement,
-  Title,
-  Tooltip,
-  Legend
-);
 
 export interface RecommendationsData {
   period: Record<string, string>;

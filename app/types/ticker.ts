@@ -1,6 +1,5 @@
 // ----- ticker list -----
 
-import { TickerCompanyHistory } from "./tickerCompanyHistory";
 import { TickerCompanyInfo } from "./tickerCompanyInfo";
 
 
@@ -39,9 +38,13 @@ export interface TickerListApiResponse {
 
 // ----- ticker details -----
 
+export interface HistoryTimeSeries {
+  [key: string]: Record<string, number>;
+}
+
 
 export interface TickerDetailsRaw {
-  history: TickerCompanyHistory | null;
+  history: HistoryTimeSeries | null;
   info: TickerCompanyInfo | null;
   isin?: string;
   income_stmt?: string;
@@ -59,7 +62,7 @@ export type TickerDetailEntry = Record<string, TickerDetailRawEntry>;
 
 export interface TickerDetails {
   symbol: string;
-  timeSeries: TickerCompanyHistory;
+  timeSeries: HistoryTimeSeries;
   info: TickerCompanyInfo | null;
   isin?: string;
   income_stmt?: TickerDetailEntry;
@@ -75,3 +78,6 @@ export interface TickerContextType {
   selectedTicker: string | null;
   setTickerData: (data: TickerDetails | null, ticker: string | null) => void;
 }
+
+// ----- history data for charts -----
+
